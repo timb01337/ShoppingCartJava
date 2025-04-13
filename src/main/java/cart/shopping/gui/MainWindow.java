@@ -22,14 +22,11 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        createInitialSplitPane();
-    }
-
-    private void createInitialSplitPane() {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, GetUserInformationPanel(), GetEmptyPanel());
         splitPane.setDividerLocation(600);
         add(splitPane, BorderLayout.CENTER);
     }
+
 
     private JPanel GetUserInformationPanel() {
         JPanel userInformationPanel = new JPanel(new GridBagLayout());
@@ -164,6 +161,16 @@ public class MainWindow extends JFrame {
             else {
                 panel.add(new ShoppingCartSummary(currentShoppingCart, refreshCallback));
                 panel.add(new CostSummary(currentShoppingCart));
+
+                JButton resetButton = new JButton("Warenkorb zurücksetzen");
+                resetButton.setFont(new Font("Arial", Font.PLAIN, 14));
+                resetButton.setFocusPainted(false);
+                resetButton.addActionListener(_ -> {
+                    user = null;
+                    ReplaceLeftPanel(GetUserInformationPanel(), splitPane.getDividerLocation());
+                    ReplaceRightPanel(GetEmptyPanel(), splitPane.getDividerLocation());
+                });
+                panel.add(resetButton);
             }
 
             shoppingCartPanel.add(panel, BorderLayout.CENTER);
