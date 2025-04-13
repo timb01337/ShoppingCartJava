@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class CostSummary extends JPanel {
+
     public CostSummary(ShoppingCart shoppingCart) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.LIGHT_GRAY);

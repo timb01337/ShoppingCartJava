@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ShoppingCartSummary extends JPanel {
+
     public ShoppingCartSummary(ShoppingCart shoppingCart, Runnable refreshCallback) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.LIGHT_GRAY);

@@ -22,13 +22,13 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, GetUserInformationPanel(), GetEmptyPanel());
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, getUserInformationPanel(), getEmptyPanel());
         splitPane.setDividerLocation(600);
         add(splitPane, BorderLayout.CENTER);
     }
 
 
-    private JPanel GetUserInformationPanel() {
+    private JPanel getUserInformationPanel() {
         JPanel userInformationPanel = new JPanel(new GridBagLayout());
         userInformationPanel.setBackground(Color.WHITE);
 
@@ -36,7 +36,6 @@ public class MainWindow extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Vorname
         JLabel firstNameLabel = new JLabel("Vorname:");
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -47,7 +46,6 @@ public class MainWindow extends JFrame {
         gbc.gridy = 0;
         userInformationPanel.add(firstNameField, gbc);
 
-        // Nachname
         JLabel lastNameLabel = new JLabel("Nachname:");
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -58,7 +56,6 @@ public class MainWindow extends JFrame {
         gbc.gridy = 1;
         userInformationPanel.add(lastNameField, gbc);
 
-        // Artikel laden Button
         JButton loadArticlesButton = new JButton("Artikel laden");
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -95,26 +92,26 @@ public class MainWindow extends JFrame {
         loadArticlesButton.addActionListener(_ -> {
             user = new User(firstNameField.getText(), lastNameField.getText());
 
-            ReplaceLeftPanel(GetItemsPanel(), splitPane.getDividerLocation());
-            ReplaceRightPanel(GetShoppingCartPanel(), splitPane.getDividerLocation());
+            replaceLeftPanel(getItemsPanel(), splitPane.getDividerLocation());
+            replaceRightPanel(getShoppingCartPanel(), splitPane.getDividerLocation());
         });
 
         return userInformationPanel;
     }
 
-    private JPanel GetEmptyPanel() {
+    private JPanel getEmptyPanel() {
         JPanel emptyPanel = new JPanel();
         emptyPanel.setBackground(Color.LIGHT_GRAY);
 
         return emptyPanel;
     }
 
-    private JPanel GetItemsPanel() {
+    private JPanel getItemsPanel() {
         JPanel itemsPanel = new JPanel();
         itemsPanel.setLayout(new BorderLayout());
         itemsPanel.setBackground(Color.LIGHT_GRAY);
 
-        var headerLabel = GetHeaderLabel("Verfügbare Artikel:");
+        var headerLabel = getHeaderLabel("Verfügbare Artikel:");
         itemsPanel.add(headerLabel, BorderLayout.NORTH);
 
         JPanel articlesPanel = new JPanel();
@@ -125,7 +122,7 @@ public class MainWindow extends JFrame {
         var shoppingItems = MockArticleData.getRandomArticles(15);
 
         for (var article : shoppingItems) {
-            Runnable refreshCallback = () -> ReplaceRightPanel(GetShoppingCartPanel(), splitPane.getDividerLocation());
+            Runnable refreshCallback = () -> replaceRightPanel(getShoppingCartPanel(), splitPane.getDividerLocation());
             articlesPanel.add(new ArticleCard(article, user.getShoppingCart(), refreshCallback));
         }
 
@@ -134,14 +131,14 @@ public class MainWindow extends JFrame {
         return itemsPanel;
     }
 
-    private JPanel GetShoppingCartPanel() {
+    private JPanel getShoppingCartPanel() {
         JPanel shoppingCartPanel = new JPanel();
         shoppingCartPanel.setLayout(new BorderLayout());
         shoppingCartPanel.setBackground(Color.LIGHT_GRAY);
 
         if (user != null) {
 
-            var headerLabel = GetHeaderLabel(user.getFirstname() + " " + user.getLastname() + "'s " + "Warenkorb:");
+            var headerLabel = getHeaderLabel(user.getFirstname() + " " + user.getLastname() + "'s " + "Warenkorb:");
             shoppingCartPanel.add(headerLabel, BorderLayout.NORTH);
 
             JPanel panel = new JPanel();
@@ -150,7 +147,7 @@ public class MainWindow extends JFrame {
             panel.add(Box.createVerticalStrut(20));
 
             var currentShoppingCart = user.getShoppingCart();
-            Runnable refreshCallback = () -> ReplaceRightPanel(GetShoppingCartPanel(), splitPane.getDividerLocation());
+            Runnable refreshCallback = () -> replaceRightPanel(getShoppingCartPanel(), splitPane.getDividerLocation());
 
             if (currentShoppingCart.getTotalArticleCount() == 0) {
                 JLabel emptyCartLabel = new JLabel("Der Warenkorb ist gerade leer.");
@@ -167,8 +164,8 @@ public class MainWindow extends JFrame {
                 resetButton.setFocusPainted(false);
                 resetButton.addActionListener(_ -> {
                     user = null;
-                    ReplaceLeftPanel(GetUserInformationPanel(), splitPane.getDividerLocation());
-                    ReplaceRightPanel(GetEmptyPanel(), splitPane.getDividerLocation());
+                    replaceLeftPanel(getUserInformationPanel(), splitPane.getDividerLocation());
+                    replaceRightPanel(getEmptyPanel(), splitPane.getDividerLocation());
                 });
                 panel.add(resetButton);
             }
@@ -179,28 +176,28 @@ public class MainWindow extends JFrame {
     }
 
 
-    private JLabel GetHeaderLabel(String text) {
+    private JLabel getHeaderLabel(String text) {
         JLabel headerLabel = new JLabel(text);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         return headerLabel;
     }
 
-    private void ReplaceLeftPanel(JPanel newPanel, int dividerLocation) {
+    private void replaceLeftPanel(JPanel newPanel, int dividerLocation) {
         splitPane.setLeftComponent(newPanel);
         splitPane.setDividerLocation(dividerLocation);
 
-        RerenderPanels();
+        rerenderPanels();
     }
 
-    private void ReplaceRightPanel(JPanel newPanel, int dividerLocation) {
+    private void replaceRightPanel(JPanel newPanel, int dividerLocation) {
         splitPane.setRightComponent(newPanel);
         splitPane.setDividerLocation(dividerLocation);
 
-        RerenderPanels();
+        rerenderPanels();
     }
 
-    private void RerenderPanels() {
+    private void rerenderPanels() {
         splitPane.revalidate();
         splitPane.repaint();
     }
