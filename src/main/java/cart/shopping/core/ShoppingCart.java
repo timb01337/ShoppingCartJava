@@ -31,8 +31,15 @@ public final class ShoppingCart {
         return new ArrayList<>(articles);
     }
 
+    public BigDecimal calculateTotalNetPrice() {
+        return articles.stream()
+                .map(Article::getNetPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                //especially when the cart is empty, ensure that the total price is 0.00 and not just 0
+                .setScale(2, RoundingMode.HALF_UP);
+    }
 
-    public BigDecimal calculateTotalPrice() {
+    public BigDecimal calculateTotalGrossPrice() {
         return articles.stream()
                 .map(Article::getGrossPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)

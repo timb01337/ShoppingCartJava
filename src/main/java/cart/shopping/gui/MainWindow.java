@@ -2,6 +2,9 @@ package cart.shopping.gui;
 
 import cart.shopping.core.User;
 import cart.shopping.data.MockArticleData;
+import cart.shopping.gui.components.ArticleCard;
+import cart.shopping.gui.components.CostSummary;
+import cart.shopping.gui.components.ShoppingCartSummary;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,7 +18,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow(String applicationName) {
         setTitle(applicationName);
-        setSize(800, 600);
+        setSize(1300, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -24,7 +27,7 @@ public class MainWindow extends JFrame {
 
     private void createInitialSplitPane() {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, GetUserInformationPanel(), GetEmptyPanel());
-        splitPane.setDividerLocation(400);
+        splitPane.setDividerLocation(600);
         add(splitPane, BorderLayout.CENTER);
     }
 
@@ -111,27 +114,69 @@ public class MainWindow extends JFrame {
 
     private JPanel GetItemsPanel() {
         JPanel itemsPanel = new JPanel();
+        itemsPanel.setLayout(new BorderLayout());
         itemsPanel.setBackground(Color.LIGHT_GRAY);
 
-        var shoppingItems = MockArticleData.getRandomArticles(5);
+        var headerLabel = GetHeaderLabel("Verfügbare Artikel:");
+        itemsPanel.add(headerLabel, BorderLayout.NORTH);
 
-        //i need to hack some reusable card which displays a shopping item
+        JPanel articlesPanel = new JPanel();
+        articlesPanel.setLayout(new BoxLayout(articlesPanel, BoxLayout.Y_AXIS));
+        articlesPanel.setBackground(Color.LIGHT_GRAY);
+        articlesPanel.add(Box.createVerticalStrut(10));
 
+        var shoppingItems = MockArticleData.getRandomArticles(15);
 
-        JLabel itemsLabel = new JLabel("Artikel werden hier angezeigt.");
-        itemsPanel.add(itemsLabel);
+        for (var article : shoppingItems) {
+            Runnable refreshCallback = () -> ReplaceRightPanel(GetShoppingCartPanel(), splitPane.getDividerLocation());
+            articlesPanel.add(new ArticleCard(article, user.getShoppingCart(), refreshCallback));
+        }
+
+        itemsPanel.add(articlesPanel, BorderLayout.CENTER);
 
         return itemsPanel;
     }
 
     private JPanel GetShoppingCartPanel() {
         JPanel shoppingCartPanel = new JPanel();
+        shoppingCartPanel.setLayout(new BorderLayout());
+        shoppingCartPanel.setBackground(Color.LIGHT_GRAY);
 
         if (user != null) {
-            shoppingCartPanel.add(new JLabel("Willkommen, " + user.getFirstname() + " " + user.getLastname() + "!"));
-        }
 
+            var headerLabel = GetHeaderLabel(user.getFirstname() + " " + user.getLastname() + "'s " + "Warenkorb:");
+            shoppingCartPanel.add(headerLabel, BorderLayout.NORTH);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.setBackground(Color.LIGHT_GRAY);
+            panel.add(Box.createVerticalStrut(20));
+
+            var currentShoppingCart = user.getShoppingCart();
+            Runnable refreshCallback = () -> ReplaceRightPanel(GetShoppingCartPanel(), splitPane.getDividerLocation());
+
+            if (currentShoppingCart.getTotalArticleCount() == 0) {
+                JLabel emptyCartLabel = new JLabel("Der Warenkorb ist gerade leer.");
+                emptyCartLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+                emptyCartLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                panel.add(emptyCartLabel);
+            }
+            else {
+                panel.add(new ShoppingCartSummary(currentShoppingCart, refreshCallback));
+                panel.add(new CostSummary(currentShoppingCart));
+            }
+
+            shoppingCartPanel.add(panel, BorderLayout.CENTER);
+        }
         return shoppingCartPanel;
+    }
+
+
+    private JLabel GetHeaderLabel(String text) {
+        JLabel headerLabel = new JLabel(text);
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        return headerLabel;
     }
 
     private void ReplaceLeftPanel(JPanel newPanel, int dividerLocation) {

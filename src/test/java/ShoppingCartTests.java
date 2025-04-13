@@ -36,8 +36,23 @@ public class ShoppingCartTests {
         cart.removeArticle(article);
     }
 
+
     @Test
-    public void testCalculateTotalPrice() {
+    public void testCalculateTotalNetPrice() {
+        ShoppingCart cart = new ShoppingCart();
+        Article article1 = new Article("A001", "Article 1", "Description", new BigDecimal("100.00"), new BigDecimal("0.20"));
+        Article article2 = new Article("A002", "Article 2", "Description", new BigDecimal("50.00"), new BigDecimal("0.10"));
+        cart.addArticle(article1);
+        cart.addArticle(article2);
+
+        BigDecimal expectedTotalNetPrice = new BigDecimal("150.00");
+
+        Assert.assertEquals(expectedTotalNetPrice, cart.calculateTotalNetPrice());
+    }
+
+
+    @Test
+    public void testCalculateTotalGrossPrice() {
         ShoppingCart cart = new ShoppingCart();
         Article article1 = new Article("A001", "Article 1", "Description", new BigDecimal("100.00"), new BigDecimal("0.20"));
         Article article2 = new Article("A002", "Article 2", "Description", new BigDecimal("100.00"), new BigDecimal("0.20"));
@@ -46,7 +61,7 @@ public class ShoppingCartTests {
 
         BigDecimal expectedTotalPrice = new BigDecimal("240.00");
 
-        Assert.assertEquals(expectedTotalPrice, cart.calculateTotalPrice());
+        Assert.assertEquals(expectedTotalPrice, cart.calculateTotalGrossPrice());
     }
 
 
@@ -64,6 +79,6 @@ public class ShoppingCartTests {
     @Test
     public void testEmptyCartTotalPrice() {
         ShoppingCart cart = new ShoppingCart();
-        Assert.assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), cart.calculateTotalPrice());
+        Assert.assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), cart.calculateTotalGrossPrice());
     }
 }
