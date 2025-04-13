@@ -8,8 +8,8 @@ public class ArticleTests {
 
     @Test
     public void testGrossPriceCalculation() {
-        var article = new Article("A001", "Test Article", "Description", new BigDecimal("100.00"), new BigDecimal("0.20"));
-        var expectedGrossPrice = new BigDecimal("120.00");
+        Article article = new Article("A001", "Test Article", "Description", new BigDecimal("100.00"), new BigDecimal("0.20"));
+        BigDecimal expectedGrossPrice = new BigDecimal("120.00");
         Assert.assertEquals(expectedGrossPrice, article.getGrossPrice());
     }
 
@@ -40,7 +40,7 @@ public class ArticleTests {
 
     @Test
     public void testValidArticleCreation() {
-        var article = new Article("A007", "Valid Article", "Description", new BigDecimal("50.00"), new BigDecimal("0.10"));
+        Article article = new Article("A007", "Valid Article", "Description", new BigDecimal("50.00"), new BigDecimal("0.10"));
         Assert.assertEquals("A007", article.getArticleNumber());
         Assert.assertEquals("Valid Article", article.getName());
         Assert.assertEquals("Description", article.getDescription());

@@ -1,5 +1,7 @@
 package cart.shopping.gui;
 
+import cart.shopping.core.Article;
+import cart.shopping.core.ShoppingCart;
 import cart.shopping.core.User;
 import cart.shopping.data.MockArticleData;
 import cart.shopping.gui.components.ArticleCard;
@@ -10,6 +12,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.List;
 
 public class MainWindow extends JFrame {
 
@@ -111,7 +114,7 @@ public class MainWindow extends JFrame {
         itemsPanel.setLayout(new BorderLayout());
         itemsPanel.setBackground(Color.LIGHT_GRAY);
 
-        var headerLabel = getHeaderLabel("Verfügbare Artikel:");
+        JLabel headerLabel = getHeaderLabel("Verfügbare Artikel:");
         itemsPanel.add(headerLabel, BorderLayout.NORTH);
 
         JPanel articlesPanel = new JPanel();
@@ -119,9 +122,9 @@ public class MainWindow extends JFrame {
         articlesPanel.setBackground(Color.LIGHT_GRAY);
         articlesPanel.add(Box.createVerticalStrut(10));
 
-        var shoppingItems = MockArticleData.getRandomArticles(15);
+        List<Article> shoppingItems = MockArticleData.getRandomArticles(15);
 
-        for (var article : shoppingItems) {
+        for (Article article : shoppingItems) {
             Runnable refreshCallback = () -> replaceRightPanel(getShoppingCartPanel(), splitPane.getDividerLocation());
             articlesPanel.add(new ArticleCard(article, user.getShoppingCart(), refreshCallback));
         }
@@ -138,7 +141,7 @@ public class MainWindow extends JFrame {
 
         if (user != null) {
 
-            var headerLabel = getHeaderLabel(user.getFirstname() + " " + user.getLastname() + "'s " + "Warenkorb:");
+            JLabel headerLabel = getHeaderLabel(user.getFirstname() + " " + user.getLastname() + "'s " + "Warenkorb:");
             shoppingCartPanel.add(headerLabel, BorderLayout.NORTH);
 
             JPanel panel = new JPanel();
@@ -146,7 +149,7 @@ public class MainWindow extends JFrame {
             panel.setBackground(Color.LIGHT_GRAY);
             panel.add(Box.createVerticalStrut(20));
 
-            var currentShoppingCart = user.getShoppingCart();
+            ShoppingCart currentShoppingCart = user.getShoppingCart();
             Runnable refreshCallback = () -> replaceRightPanel(getShoppingCartPanel(), splitPane.getDividerLocation());
 
             if (currentShoppingCart.getTotalArticleCount() == 0) {
