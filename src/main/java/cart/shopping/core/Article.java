@@ -19,12 +19,6 @@ public final class Article {
         setTaxRate(taxRate);
     }
 
-    /**
-     * Calculates the gross price by adding the tax rate to the net price
-     * and rounding the result to two decimal places using HALF_UP rounding.
-     *
-     * @return The gross price as a BigDecimal with two decimal places.
-     */
     public BigDecimal getGrossPrice() {
         return netPrice.multiply(BigDecimal.ONE.add(taxRate)).setScale(2, RoundingMode.HALF_UP);
     }
@@ -45,6 +39,10 @@ public final class Article {
         return netPrice;
     }
 
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
     private void setNetPrice(BigDecimal netPrice) {
         if (netPrice == null || netPrice.compareTo(new BigDecimal("0.01")) < 0) {
             throw new IllegalArgumentException("Net price must be greater than or equal to 0.01");
@@ -55,10 +53,6 @@ public final class Article {
         }
 
         this.netPrice = netPrice;
-    }
-
-    public BigDecimal getTaxRate() {
-        return taxRate;
     }
 
     private void setTaxRate(BigDecimal taxRate) {

@@ -27,10 +27,6 @@ public final class ShoppingCart {
         articles.remove(article);
     }
 
-    public List<Article> getArticles() {
-        return new ArrayList<>(articles);
-    }
-
     public BigDecimal calculateTotalNetPrice() {
         return articles.stream()
                 .map(Article::getNetPrice)
@@ -49,5 +45,9 @@ public final class ShoppingCart {
 
     public int getTotalArticleCount() {
         return articles.size();
+    }
+
+    public List<Article> getArticles() {
+        return new ArrayList<>(articles);
     }
 }

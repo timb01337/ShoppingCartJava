@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean launchUi = false;
+        boolean launchUi = true;
 
         for (String arg : args) {
             if (LAUNCH_UI_ARGUMENT.equals(arg)) {
