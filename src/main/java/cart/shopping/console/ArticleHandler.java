@@ -23,7 +23,7 @@ public class ArticleHandler {
         System.out.println("Verfügbare Artikel:");
         for (int i = 0; i < articles.size(); i++) {
             Article article = articles.get(i);
-            System.out.printf("%d. %s - %s (%.2f€)%n", i + 1, article.getName(), article.getDescription(), article.getNetPrice());
+            System.out.printf("%d. %s - %s (%.2f EUR)%n", i + 1, article.getName(), article.getDescription(), article.getNetPrice());
         }
         System.out.println("0. Zurück zum Hauptmenü");
         System.out.printf("--------------------------------------------------------%n");

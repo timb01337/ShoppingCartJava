@@ -29,7 +29,7 @@ public class ShoppingCartHandler {
         } else {
             System.out.println("Warenkorb-Inhalt:");
             currentUser.getShoppingCart().getArticles().forEach(article ->
-                    System.out.printf("- %s: %.2f€%n", article.getName(), article.getNetPrice()));
+                    System.out.printf("- %s: %.2f EUR%n", article.getName(), article.getNetPrice()));
         }
         System.out.printf("--------------------------------------------------------%n");
     }
